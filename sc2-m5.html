@@ -343,8 +343,8 @@ steps:
 <pre class="code term">mkdir leaky-repo &amp;&amp; cd leaky-repo
 git init</pre><p class="fname">config.js</p><pre class="code">module.exports = {
   region: "ap-south-1",
-  awsAccessKeyId: "AKIAQ3EGRL4WZPXJ7KN5",
-  awsSecretAccessKey: "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",
+  awsAccessKeyId: "&#65;KIAQ3EGRL4WZPXJ7KN5",
+  awsSecretAccessKey: "&#119;JalrXUtnFEMI/K7MDENG/bPxRfiCYzK8p2Lq9Tv",
 };</pre><pre class="code term">git add config.js &amp;&amp; git commit -m "Add config"</pre>
 <p>These are made-up values in the format of AWS keys. Now "fix" the file by deleting the two key lines, and commit again:</p>
 <pre class="code term">git commit -am "Remove keys"
