@@ -1,0 +1,533 @@
+/* build: 2026110701 */
+/* Question bank for sc2-exam.html: 20 scenarios (t: "s") and 20 multiple-choice questions (t: "m").
+   m = module number, a = index of the correct option in o. */
+window.SC2_BANK = [
+ {
+  "id": "s01",
+  "t": "s",
+  "m": "1",
+  "q": "An online shop lets warehouse staff mark orders as shipped. A tester shipped an unpaid order by calling the API directly.",
+  "o": [
+   "Store each order's status on the server and allow only permitted transitions, such as paid to shipped",
+   "Hide the Ship button until the order is paid",
+   "Rename the status field",
+   "Log every status change"
+  ],
+  "a": 0,
+  "code": "POST /api/orders/1009/status\n{\"status\": \"shipped\"}"
+ },
+ {
+  "id": "s02",
+  "t": "s",
+  "m": "1",
+  "q": "Customers can apply the same single-use coupon to many orders by sending the apply-coupon request several times at once.",
+  "o": [
+   "Disable the Apply button after one click",
+   "Mark the coupon as used and apply it inside one database transaction that locks the coupon row",
+   "Show a warning that coupons are single-use",
+   "Check the coupon in the browser before sending"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s03",
+  "t": "s",
+  "m": "1",
+  "q": "A team is about to build a new payment-refund feature. Which step finds missing controls most cheaply?",
+  "o": [
+   "A penetration test after release",
+   "A threat-modelling session on the design, using a data-flow diagram and STRIDE",
+   "A dependency scan",
+   "Adding more logging after release"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s04",
+  "t": "s",
+  "m": "2",
+  "q": "The CI pipeline runs this on every build.",
+  "o": [
+   "Run npm ci, then npm audit --audit-level=high, and keep the lock file in Git",
+   "Run npm install twice",
+   "Delete the lock file so the newest versions are always used",
+   "Run the build on a faster machine"
+  ],
+  "a": 0,
+  "code": "npm install\nnpm run build"
+ },
+ {
+  "id": "s05",
+  "t": "s",
+  "m": "2",
+  "q": "A page loads a charting library from a CDN.",
+  "o": [
+   "Add an integrity attribute with the file's SHA-384 hash and crossorigin=\"anonymous\"",
+   "Load it over HTTP so it is faster",
+   "Copy the URL into a Content-Security-Policy header only",
+   "Add a random query string to the URL"
+  ],
+  "a": 0,
+  "code": "<script src=\"https://cdn.example.com/chart.min.js\"></script>"
+ },
+ {
+  "id": "s06",
+  "t": "s",
+  "m": "2",
+  "q": "A Python service reads user preferences sent by a partner system.",
+  "o": [
+   "Wrap the call in try/except",
+   "Parse JSON into a pydantic model that rejects unknown fields",
+   "Check that the data is smaller than 1 MB",
+   "Base64-decode the data first"
+  ],
+  "a": 1,
+  "code": "prefs = pickle.loads(request.data)"
+ },
+ {
+  "id": "s07",
+  "t": "s",
+  "m": "2",
+  "q": "A workflow uses a third-party action by tag and runs with default token permissions.",
+  "o": [
+   "Pin the action to a full commit SHA and set permissions to only what the job needs",
+   "Change @v3 to @main",
+   "Copy the action's README into the repository",
+   "Run the workflow only on weekends"
+  ],
+  "a": 0,
+  "code": "- uses: some-org/deploy-tool@v3"
+ },
+ {
+  "id": "s08",
+  "t": "s",
+  "m": "3",
+  "q": "The sign-in code logs failures like this:",
+  "o": [
+   "Log the event as structured data with the email, IP and request ID, and never the password",
+   "Keep the line but encrypt the log file",
+   "Log only the password, not the email",
+   "Remove all logging for sign-in"
+  ],
+  "a": 0,
+  "code": "log.info(\"Login failed for \" + email + \" password=\" + password)"
+ },
+ {
+  "id": "s09",
+  "t": "s",
+  "m": "3",
+  "q": "A refund check calls a fraud service. When the service times out, the code allows the refund.",
+  "o": [
+   "Allow refunds under 10,000 when the service is down",
+   "Decline or hold the refund, log the failure, and alert if it keeps happening",
+   "Retry the call without a limit",
+   "Ask the customer to confirm"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s10",
+  "t": "s",
+  "m": "3",
+  "q": "Security logs show 2,000 failed sign-ins for one account in an hour, but nobody noticed for a week.",
+  "o": [
+   "Keep logs for longer",
+   "Add an alert for this pattern, with an agreed person who responds",
+   "Log more detail for each failure",
+   "Encrypt the logs"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s11",
+  "t": "s",
+  "m": "4",
+  "q": "An API returns a vehicle's location for any vehicle ID, to any signed-in user.",
+  "o": [
+   "Check on the server that the vehicle belongs to the signed-in user, and return 404 if not",
+   "Use longer vehicle IDs",
+   "Remove the vehicle ID from the community posts only",
+   "Add HTTPS"
+  ],
+  "a": 0,
+  "code": "GET /api/vehicles/{vehicleId}/location"
+ },
+ {
+  "id": "s12",
+  "t": "s",
+  "m": "4",
+  "q": "The profile API returns the whole user record, including passwordHash and role, and the page shows only the name.",
+  "o": [
+   "Hide the extra fields in the page",
+   "Return a response type that lists only the fields the caller may see",
+   "Encrypt passwordHash in the response",
+   "Return the record only to signed-in users"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s13",
+  "t": "s",
+  "m": "4",
+  "q": "A search API accepts pageSize=1000000 and has no rate limit.",
+  "o": [
+   "Cap pageSize, add rate limits per user and per source, and set timeouts",
+   "Cache all search results",
+   "Add more servers",
+   "Ask users to use smaller page sizes"
+  ],
+  "a": 0
+ },
+ {
+  "id": "s14",
+  "t": "s",
+  "m": "4",
+  "q": "An old /api/v1 is still running next to /api/v2 and lacks the newer authorisation checks.",
+  "o": [
+   "Keep it, but do not document it",
+   "Add it to the API inventory, apply the same checks or retire it",
+   "Move it to a different port",
+   "Rename it to /api/legacy"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s15",
+  "t": "s",
+  "m": "5",
+  "q": "A Node.js app has its database password in the source code, which is in Git.",
+  "o": [
+   "Move the password to a .env file committed to Git",
+   "Rotate the password, store it in Secrets Manager or Key Vault, and read it at run time",
+   "Make the repository private",
+   "Encode the password with Base64"
+  ],
+  "a": 1,
+  "code": "const db = new Client({ password: \"Pr0d-Passw0rd!\" });"
+ },
+ {
+  "id": "s16",
+  "t": "s",
+  "m": "5",
+  "q": "A GitHub Actions workflow deploys to AWS using access keys stored as repository secrets.",
+  "o": [
+   "Use OIDC with an IAM role whose trust policy allows only this repository and branch",
+   "Rotate the keys once a year",
+   "Store the keys in the workflow file instead",
+   "Give the keys administrator rights so deployments never fail"
+  ],
+  "a": 0
+ },
+ {
+  "id": "s17",
+  "t": "s",
+  "m": "5",
+  "q": "A developer pushed a cloud key to a public repository, then deleted it in the next commit.",
+  "o": [
+   "Nothing more is needed",
+   "Revoke the key straight away, check the cloud logs for any use, then decide on cleaning history",
+   "Make the repository private and keep the key",
+   "Add the file to .gitignore"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s18",
+  "t": "s",
+  "m": "5",
+  "q": "An app on Azure App Service reads a connection string from appsettings.json in the repository.",
+  "o": [
+   "Store it in Key Vault and let the app's managed identity read it",
+   "Move it to a comment in the code",
+   "Email it to the team",
+   "Store it in the browser's localStorage"
+  ],
+  "a": 0
+ },
+ {
+  "id": "s19",
+  "t": "s",
+  "m": "6",
+  "q": "A developer wants to run an OWASP ZAP active scan against a client's staging site to help them.",
+  "o": [
+   "Go ahead, because staging is not production",
+   "First get written permission and agree the scope and rules of engagement",
+   "Run a passive scan only, without asking",
+   "Run it at night when nobody is using the site"
+  ],
+  "a": 1
+ },
+ {
+  "id": "s20",
+  "t": "s",
+  "m": "6",
+  "q": "A penetration test found broken access control. The fix has been deployed.",
+  "o": [
+   "Close the finding",
+   "Retest the finding, and add an automated test that fails if the weakness returns",
+   "Run a dependency scan",
+   "Wait for next year's test"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m01",
+  "t": "m",
+  "m": "0",
+  "q": "Which tool lets you see, change and replay each request between the browser and an app?",
+  "o": [
+   "Gitleaks",
+   "OWASP ZAP",
+   "pip-audit",
+   "CycloneDX"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m02",
+  "t": "m",
+  "m": "0",
+  "q": "What does an SBOM list?",
+  "o": [
+   "Every component and version in an application",
+   "Every user of an application",
+   "Every open port on a server",
+   "Every test case"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m03",
+  "t": "m",
+  "m": "1",
+  "q": "In STRIDE, which threat does an audit log that users cannot change mainly address?",
+  "o": [
+   "Spoofing",
+   "Tampering",
+   "Repudiation",
+   "Denial of service"
+  ],
+  "a": 2
+ },
+ {
+  "id": "m04",
+  "t": "m",
+  "m": "1",
+  "q": "Which of these is a business-logic flaw?",
+  "o": [
+   "A missing security header",
+   "Shipping an order before it is paid",
+   "An outdated library",
+   "A weak TLS setting"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m05",
+  "t": "m",
+  "m": "1",
+  "q": "Which OWASP Top 10:2025 category is threat modelling mainly meant to prevent?",
+  "o": [
+   "A06 Insecure Design",
+   "A05 Injection",
+   "A03 Software Supply Chain Failures",
+   "A09 Logging and Alerting Failures"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m06",
+  "t": "m",
+  "m": "2",
+  "q": "Which category is new in the OWASP Top 10:2025 and covers the whole software supply chain?",
+  "o": [
+   "A03 Software Supply Chain Failures",
+   "A08 Software or Data Integrity Failures",
+   "A02 Security Misconfiguration",
+   "A06 Insecure Design"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m07",
+  "t": "m",
+  "m": "2",
+  "q": "What is dependency confusion?",
+  "o": [
+   "Using two versions of the same library",
+   "A public package named like a private one, installed by mistake",
+   "A library with no documentation",
+   "A circular dependency"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m08",
+  "t": "m",
+  "m": "2",
+  "q": "Which deserialisation approach is safe for data from outside?",
+  "o": [
+   "Java ObjectInputStream",
+   ".NET BinaryFormatter",
+   "Python pickle",
+   "JSON into a fixed data type"
+  ],
+  "a": 3
+ },
+ {
+  "id": "m09",
+  "t": "m",
+  "m": "3",
+  "q": "Which category is new in the OWASP Top 10:2025 and covers errors that leave a system unsafe?",
+  "o": [
+   "A10 Mishandling of Exceptional Conditions",
+   "A09 Logging and Alerting Failures",
+   "A07 Authentication Failures",
+   "A01 Broken Access Control"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m10",
+  "t": "m",
+  "m": "3",
+  "q": "What is log injection?",
+  "o": [
+   "Adding too many log lines",
+   "User input that adds fake entries to a log, for example with line breaks",
+   "Deleting log files",
+   "Logging in as another user"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m11",
+  "t": "m",
+  "m": "3",
+  "q": "What does \"failing closed\" mean?",
+  "o": [
+   "When a check cannot complete, the action is refused",
+   "Closing all connections when an error occurs",
+   "Shutting the app down after any error",
+   "Hiding errors from users"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m12",
+  "t": "m",
+  "m": "4",
+  "q": "What does API1 Broken Object Level Authorization mean?",
+  "o": [
+   "The API has no authentication",
+   "A caller can use objects that belong to someone else by changing an ID",
+   "The API is too slow",
+   "The API returns errors in XML"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m13",
+  "t": "m",
+  "m": "4",
+  "q": "Mass assignment is part of which API Security Top 10 risk?",
+  "o": [
+   "API3 Broken Object Property Level Authorization",
+   "API7 Server Side Request Forgery",
+   "API9 Improper Inventory Management",
+   "API2 Broken Authentication"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m14",
+  "t": "m",
+  "m": "4",
+  "q": "Which API risk covers trusting data from another company's API without checking it?",
+  "o": [
+   "API10 Unsafe Consumption of APIs",
+   "API6 Unrestricted Access to Sensitive Business Flows",
+   "API8 Security Misconfiguration",
+   "API4 Unrestricted Resource Consumption"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m15",
+  "t": "m",
+  "m": "5",
+  "q": "What is the most preferred way for an app on AWS Lambda to get AWS credentials?",
+  "o": [
+   "An access key in an environment variable",
+   "The function's IAM role",
+   "An access key in the code",
+   "An access key in Secrets Manager"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m16",
+  "t": "m",
+  "m": "5",
+  "q": "What does GitHub push protection do?",
+  "o": [
+   "Blocks pushes that contain known types of secrets",
+   "Stops force-pushes to main",
+   "Requires two reviewers",
+   "Encrypts the repository"
+  ],
+  "a": 0
+ },
+ {
+  "id": "m17",
+  "t": "m",
+  "m": "5",
+  "q": "In a GitHub OIDC trust policy for AWS, what does the sub condition limit?",
+  "o": [
+   "Which AWS region can be used",
+   "Which repository and branch may assume the role",
+   "How long the session lasts",
+   "Which AWS services the role can call"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m18",
+  "t": "m",
+  "m": "6",
+  "q": "What does CVSS give each finding?",
+  "o": [
+   "A CWE number",
+   "A severity score from 0 to 10",
+   "A fix",
+   "An owner"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m19",
+  "t": "m",
+  "m": "6",
+  "q": "Which OWASP guide gives a detailed checklist for testing web applications?",
+  "o": [
+   "OWASP ASVS",
+   "OWASP Web Security Testing Guide (WSTG)",
+   "OWASP SAMM",
+   "OWASP Top 10"
+  ],
+  "a": 1
+ },
+ {
+  "id": "m20",
+  "t": "m",
+  "m": "6",
+  "q": "In a grey-box test, what is the tester usually given?",
+  "o": [
+   "Nothing at all",
+   "Full source code and design documents",
+   "A user account and some documentation",
+   "Administrator access to production"
+  ],
+  "a": 2
+ }
+];
