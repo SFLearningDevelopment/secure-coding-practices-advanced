@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<!-- build: 2026110701 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4 &mdash; Web API security | Secure Coding: Intermediate to Advanced</title>
+<style>
+:root{
+  --ink:#1B2124; --ink-2:#495259; --rule:#DFE3DE; --paper:#F6F7F5; --panel:#FFFFFF;
+  --level:#1a6eb5; --level-soft:#E8F1FA;
+  --lens:#B0721A; --lens-soft:#FBF4E7;
+  --verify:#41525F; --verify-soft:#EEF2F4;
+  --caution:#9E3025; --caution-soft:#FBEDEB;
+  --ok:#2E6B34; --ok-soft:#E9F2E9;
+  --serif: Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+  --sans: ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px 90px}
+a{color:var(--level);text-decoration-thickness:1px;text-underline-offset:2px}
+.masthead{border-bottom:1px solid var(--rule);background:var(--panel)}
+.masthead .wrap{padding-top:38px;padding-bottom:30px}
+.crumb{font-family:var(--sans);font-size:13px;color:var(--ink-2);margin:0 0 14px}
+.who{float:right;font-size:12.5px;color:var(--ink-2)}
+.back{color:var(--level);text-decoration:none;font-weight:600}
+.back:hover{text-decoration:underline}
+.signout{background:none;border:0;color:var(--level);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;font-family:inherit;padding:0}
+.chip{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.02em;
+  color:#fff;background:var(--level);border-radius:3px;padding:3px 9px;margin-right:8px}
+h1{font-family:var(--sans);font-weight:640;font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.015em}
+.deck{font-size:18px;color:var(--ink-2);margin:0;max-width:64ch}
+.facts{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:13.5px;color:var(--ink-2)}
+.facts b{display:block;color:var(--ink);font-weight:600}
+.progress{position:sticky;top:0;z-index:20;background:rgba(246,247,245,.94);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.progress .wrap{display:flex;align-items:center;gap:14px;padding-top:9px;padding-bottom:9px}
+.bar{flex:1;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--level);transition:width .25s ease}
+.count{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+h2{font-family:var(--sans);font-weight:640;font-size:22px;line-height:1.25;margin:0;letter-spacing:-.01em}
+h3{font-family:var(--sans);font-weight:620;font-size:16px;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px}
+li{margin-bottom:7px}
+section.stage{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.stage-head{display:flex;gap:16px;align-items:baseline;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:14px;color:var(--level);border:1px solid var(--level);
+  border-radius:50%;width:30px;height:30px;min-width:30px;display:flex;align-items:center;
+  justify-content:center;align-self:flex-start;margin-top:2px}
+.num.ok{background:var(--level);color:#fff}
+.goal{font-family:var(--sans);font-size:14px;color:var(--ink-2);margin:0 0 18px 46px}
+.stage-body{margin-left:46px}
+.callout{border-radius:5px;padding:14px 16px;margin:0 0 16px;font-size:15.5px}
+.callout p{margin:0;max-width:66ch}
+.callout p+p{margin-top:9px}
+.callout ul{margin:6px 0 0;font-size:15px}
+.callout .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;display:block;margin-bottom:5px}
+.lens{background:var(--lens-soft);border-left:3px solid var(--lens)}
+.lens .tag{color:var(--lens)}
+.verify{background:var(--verify-soft);border-left:3px dashed var(--verify)}
+.verify .tag{color:var(--verify)}
+.caution{background:var(--caution-soft);border-left:3px solid var(--caution)}
+.caution .tag{color:var(--caution)}
+.good{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.good .tag{color:var(--ok)}
+.done{background:var(--level-soft);border-radius:5px;padding:16px 18px;margin-top:26px}
+.done .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;color:var(--level);display:block;margin-bottom:8px}
+.done label{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;cursor:pointer;margin:0}
+.done input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.done label.checked{color:var(--ink-2)}
+.done .sync{font-family:var(--sans);font-size:12px;color:var(--ink-2);margin:9px 0 0 27px;min-height:15px}
+.done input:disabled{accent-color:#B9C2BA}
+.done label.locked{color:#8D979C;cursor:not-allowed}
+.orient{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.secdone{display:flex;gap:10px;align-items:center;font-family:var(--sans);font-size:14px;color:var(--ink-2);
+  border-top:1px solid var(--rule);margin-top:22px;padding-top:14px;cursor:pointer}
+.secdone input{accent-color:var(--level);width:16px;height:16px;flex:none}
+.secdone.ticked{color:var(--level);font-weight:600}
+section.stage.check{border-color:#C9DAEA;background:#FCFDFE}
+.gstem{font-weight:600;margin:0 0 12px}
+.gq{margin-bottom:26px}
+.gopt{display:flex;gap:11px;align-items:flex-start;font-size:16px;margin-bottom:8px;cursor:pointer;max-width:72ch}
+.gopt input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.gopt input:disabled+span{color:var(--ink-2)}
+.gfb{margin-top:12px}
+.gfb .callout{margin-bottom:0}
+.gactions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.gstate{font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+button.pbtn{border:0;cursor:pointer;font-family:var(--sans)}
+.recap{font-family:var(--sans);font-size:15px;color:var(--ink-2);border-top:1px solid var(--rule);
+  margin-top:24px;padding-top:16px}
+.recap b{color:var(--ink);font-weight:620}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:34px 0 0;flex-wrap:wrap}
+.pbtn{display:inline-block;background:var(--level);color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:14.5px;font-weight:600;padding:11px 22px;border-radius:8px}
+.pbtn:hover{filter:brightness(1.08)}
+.pbtn.ghost{background:none;color:var(--level);border:1.5px solid var(--level)}
+.pbtn.off,.pbtn:disabled{background:none;color:#A9B2B6;border:1.5px solid var(--rule);pointer-events:none}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:0 0 16px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-size:13px;font-weight:620}
+td code,li code,p code{font-family:var(--mono);font-size:.86em;background:#EEF2F4;border-radius:3px;padding:1px 5px}
+.fname{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+pre.code{background:#122130;color:#E3EAF1;font-family:var(--mono);font-size:13.5px;line-height:1.55;
+  padding:14px 16px;border-radius:6px;overflow-x:auto;margin:0 0 16px;white-space:pre}
+pre.code .c{color:#8FA3B5}
+pre.term{background:#1B2124;color:#D8E0D9}
+figure{margin:0 0 22px}
+figcaption{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);margin-top:8px}
+svg{width:100%;height:auto;display:block}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding-top:18px;
+  font-family:var(--sans);font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:620px){
+  body{font-size:16px}
+  .stage-body,.goal{margin-left:0}
+  .stage-head{gap:12px}
+  section.stage,.orient{padding:20px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<style>
+  details.lang{border:1px solid var(--rule);border-radius:6px;margin:0 0 10px;background:var(--panel)}
+  details.lang>summary{cursor:pointer;list-style:none;font-family:var(--sans);font-size:14.5px;font-weight:600;
+    padding:10px 14px;display:flex;align-items:center;gap:10px}
+  details.lang>summary::-webkit-details-marker{display:none}
+  details.lang>summary::before{content:"\25B8";color:var(--level);font-size:13px;width:12px}
+  details.lang[open]>summary::before{content:"\25BE"}
+  details.lang>summary:hover{background:var(--level-soft)}
+  details.lang>.lbody{padding:4px 16px 4px}
+  .langbar{display:flex;gap:10px;font-family:var(--sans);font-size:12.5px;margin:0 0 8px}
+  .langbar button{background:none;border:0;color:var(--level);cursor:pointer;padding:0;text-decoration:underline;font-family:inherit;font-size:inherit}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumb"><span id="who" class="who"></span><a class="back" href="index.html?v=2026110701">&#8592; Dashboard</a> &middot; SF Knowledge Hub &middot; Secure Coding: Intermediate to Advanced</p>
+    <p><span class="chip">Module 4 of 6</span></p>
+    <h1>Web API security</h1>
+    <p class="deck">Protect APIs that attackers call directly: check every object, function and field, limit how much each caller can use, and keep track of every API you run.</p>
+    <div class="facts"><div><b>Time</b>About 4 hours</div><div><b>Sections</b>4, each with a finish box</div><div><b>OWASP</b>OWASP API Security Top 10 (2023)</div><div><b>Completion</b>All sections, check questions (70%), then the box at the end</div></div>
+  </div>
+</header>
+
+<div class="progress"><div class="wrap">
+  <div class="bar"><span id="fill"></span></div>
+  <div class="count" id="count">Loading progress&hellip;</div>
+</div></div>
+
+<div class="wrap">
+
+<div class="orient">
+<h2>Before you begin</h2>
+<p>Attackers do not need your web page or mobile app to call your API. This module covers the OWASP API Security Top 10, with a focus on the risks that cause the most breaches: object-level and property-level authorisation.</p>
+<p>Have crAPI ready, and the mailbox at port 8025.</p>
+</div>
+
+<section class="stage" id="sec-1">
+  <div class="stage-head"><div class="num" id="num-1">1</div><h2>Theory: the OWASP API Security Top 10</h2></div>
+  <p class="goal">The ten API risks, and the practices that prevent them.</p>
+  <div class="stage-body">
+
+<p>APIs are now the main way web and mobile apps exchange data, and attackers call them directly, without any page or app in between. OWASP keeps a separate list for APIs: the <b>OWASP API Security Top 10</b>, last updated in 2023.</p>
+<table>
+<tr><th>ID</th><th>Risk</th><th>Example</th><th>Main control</th></tr>
+<tr><td>API1</td><td>Broken Object Level Authorization</td><td>Changing an object ID returns someone else's data</td><td>Check ownership of every object on the server</td></tr><tr><td>API2</td><td>Broken Authentication</td><td>Weak tokens, no expiry, no limit on guessing</td><td>Standard token flows (OAuth 2.0), short expiry, rate limits</td></tr><tr><td>API3</td><td>Broken Object Property Level Authorization</td><td>Responses include hidden fields, or requests can set fields they should not</td><td>Allow-lists for fields in responses and in requests</td></tr><tr><td>API4</td><td>Unrestricted Resource Consumption</td><td>No limits on request size, page size or request rate</td><td>Rate limits, maximum page sizes, timeouts, upload limits</td></tr><tr><td>API5</td><td>Broken Function Level Authorization</td><td>A normal user can call an admin endpoint</td><td>Role checks on every endpoint, deny by default</td></tr><tr><td>API6</td><td>Unrestricted Access to Sensitive Business Flows</td><td>Bots buy all the stock or create thousands of accounts</td><td>Limits per account and device, bot detection on key flows</td></tr><tr><td>API7</td><td>Server Side Request Forgery</td><td>The API fetches a URL chosen by the caller</td><td>Allow-list of destinations (Course 1, Module 2)</td></tr><tr><td>API8</td><td>Security Misconfiguration</td><td>Detailed errors, open CORS, missing TLS</td><td>Hardened settings (Course 1, Module 3)</td></tr><tr><td>API9</td><td>Improper Inventory Management</td><td>Old API versions and test endpoints left running</td><td>Keep a list of every API and version; retire old ones</td></tr><tr><td>API10</td><td>Unsafe Consumption of APIs</td><td>Trusting data from another company's API without checks</td><td>Validate responses from other APIs like user input</td></tr>
+</table>
+<h3>Recommended practices for APIs</h3>
+<ul>
+<li><b>Authorise every object and every property.</b> For each request, check that the caller may use this object (API1), this function (API5), and each field they read or write (API3).</li>
+<li><b>Use separate data types for requests and responses</b> (often called DTOs), listing exactly which fields are allowed. Never send a database record straight back, and never copy a request body straight into one.</li>
+<li><b>Limit everything:</b> request rate per user and per source, page sizes, request body size, upload size and processing time.</li>
+<li><b>Describe every API</b> in an OpenAPI document, keep an inventory of versions and environments, and turn off what is not used.</li>
+<li><b>Treat other APIs as untrusted.</b> Validate their responses, set timeouts, and do not follow their redirects blindly.</li>
+</ul>
+    <label class="secdone" id="sd-1"><input type="checkbox" class="sec" data-sec="1" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-2">
+  <div class="stage-head"><div class="num" id="num-2">2</div><h2>OWASP mapping</h2></div>
+  <p class="goal">How the API Security Top 10 lines up with the OWASP Top 10:2025.</p>
+  <div class="stage-body">
+
+<p>The OWASP API Security Top 10 is a separate list from the OWASP Top 10, but each risk lines up with one of the main categories. The table shows the closest match.</p>
+<table>
+<tr><th>API Security Top 10 (2023)</th><th>Closest OWASP Top 10:2025 category</th></tr>
+<tr><td>API1 Broken Object Level Authorization</td><td>A01 Broken Access Control (CWE-639)</td></tr><tr><td>API2 Broken Authentication</td><td>A07 Authentication Failures</td></tr><tr><td>API3 Broken Object Property Level Authorization</td><td>A01 Broken Access Control (CWE-213, CWE-915)</td></tr><tr><td>API4 Unrestricted Resource Consumption</td><td>A06 Insecure Design (CWE-770)</td></tr><tr><td>API5 Broken Function Level Authorization</td><td>A01 Broken Access Control (CWE-285)</td></tr><tr><td>API6 Unrestricted Access to Sensitive Business Flows</td><td>A06 Insecure Design</td></tr><tr><td>API7 Server Side Request Forgery</td><td>A01 Broken Access Control (CWE-918)</td></tr><tr><td>API8 Security Misconfiguration</td><td>A02 Security Misconfiguration</td></tr><tr><td>API9 Improper Inventory Management</td><td>A02 Security Misconfiguration</td></tr><tr><td>API10 Unsafe Consumption of APIs</td><td>A08 Software or Data Integrity Failures</td></tr>
+</table><div class="callout caution"><span class="tag">Watch out</span><p>API3 has two halves. <b>Excessive data exposure</b>: the response includes fields the caller should not see, such as a password hash. <b>Mass assignment</b>: the request can set fields the caller should not change, such as their role. Both are fixed with field allow-lists.</p></div>
+    <label class="secdone" id="sd-2"><input type="checkbox" class="sec" data-sec="2" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-3">
+  <div class="stage-head"><div class="num" id="num-3">3</div><h2>Fixes: field allow-lists and limits</h2></div>
+  <p class="goal">A profile API with the weakness and fixed, in each language.</p>
+  <div class="stage-body">
+
+<p>The example is a "my profile" API. With the weakness, the response returns the whole database record (including the password hash and account credit), and the update copies any field from the request (including the role). The fix in every language: an explicit list of fields for the response, an explicit list of editable fields for the update, and a rate limit.</p>
+<div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<p>Express. The response and the update each use an explicit list of fields.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">app.get("/api/users/me", requireLogin, async (req, res) =&gt; {
+  res.json(await users.findById(req.session.userId));     <span class="c">// every column, including passwordHash</span>
+});
+
+app.patch("/api/users/me", requireLogin, async (req, res) =&gt; {
+  await users.update(req.session.userId, req.body);        <span class="c">// can set role or credit</span>
+  res.sendStatus(204);
+});</pre>
+<p class="fname">Fixed</p>
+<pre class="code">const toPublicUser = (u) =&gt; ({ id: u.id, name: u.name, email: u.email, phone: u.phone });
+const ProfileUpdate = z.object({ name: z.string().max(100), phone: z.string().max(20) }).partial().strict();
+
+app.get("/api/users/me", requireLogin, async (req, res) =&gt; {
+  res.json(toPublicUser(await users.findById(req.session.userId)));
+});
+
+app.patch("/api/users/me", requireLogin, rateLimit({ windowMs: 60_000, limit: 10 }), async (req, res) =&gt; {
+  const parsed = ProfileUpdate.safeParse(req.body);        <span class="c">// role or credit -&gt; 400</span>
+  if (!parsed.success) return res.status(400).json({ error: "Invalid fields" });
+  await users.update(req.session.userId, parsed.data);
+  res.sendStatus(204);
+});</pre>
+</div></details>
+<details class="lang"><summary>JavaScript (browser)</summary><div class="lbody">
+<p>Fields the page does not show are still in the response for anyone who opens the Network tab.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">const me = await (await fetch("/api/users/me")).json();
+nameLabel.textContent = me.name;   <span class="c">// passwordHash and credit are in "me" too, just not shown</span></pre>
+<p class="fname">Fixed</p>
+<pre class="code"><span class="c">// Ask the server to send only what the page needs (see the Node.js block).</span>
+<span class="c">// Hiding fields in the page is not protection.</span>
+const me = await (await fetch("/api/users/me")).json();   <span class="c">// { id, name, email, phone }</span>
+nameLabel.textContent = me.name;</pre>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<p>Separate types for the database record and the API response make leaks visible in review.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">interface UserRecord { id: number; name: string; email: string; phone: string;
+                       role: string; passwordHash: string; credit: number; }
+
+app.get("/api/users/:id", async (req, res) =&gt; {
+  const u: UserRecord = await users.findById(req.params.id);   <span class="c">// no ownership check</span>
+  res.json(u);
+});</pre>
+<p class="fname">Fixed</p>
+<pre class="code">interface PublicUser { id: number; name: string; email: string; phone: string; }
+
+function toPublicUser(u: UserRecord): PublicUser {
+  return { id: u.id, name: u.name, email: u.email, phone: u.phone };
+}
+
+app.get("/api/users/:id", requireLogin, async (req, res) =&gt; {
+  if (req.params.id !== String(req.session.userId)) return res.sendStatus(404);   <span class="c">// API1</span>
+  res.json(toPublicUser(await users.findById(req.params.id)));                      <span class="c">// API3</span>
+});</pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p>FastAPI and pydantic: one model for the response and one for the update.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">@app.get("/api/users/me")
+def me(user: User = Depends(current_user)):
+    return user.__dict__                       <span class="c"># every field</span>
+
+@app.patch("/api/users/me")
+def update(body: dict, user: User = Depends(current_user)):
+    for k, v in body.items():
+        setattr(user, k, v)                    <span class="c"># mass assignment</span></pre>
+<p class="fname">Fixed</p>
+<pre class="code">class PublicUser(BaseModel):
+    id: int
+    name: str
+    email: str
+    phone: str
+
+class ProfileUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")  <span class="c"># role or credit -&gt; 422</span>
+    name: str | None = Field(default=None, max_length=100)
+    phone: str | None = Field(default=None, max_length=20)
+
+@app.get("/api/users/me", response_model=PublicUser)
+def me(user: User = Depends(current_user)):
+    return user
+
+@app.patch("/api/users/me", response_model=PublicUser)
+def update(body: ProfileUpdate, user: User = Depends(current_user)):
+    for k, v in body.model_dump(exclude_unset=True).items():
+        setattr(user, k, v)
+    return user</pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p>Spring Boot with request and response records.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">@GetMapping("/api/users/me")
+public User me(Principal p) { return users.findByEmail(p.getName()); }   <span class="c">// the entity, all fields</span>
+
+@PatchMapping("/api/users/me")
+public void update(@RequestBody User changes, Principal p) {
+    users.save(merge(users.findByEmail(p.getName()), changes));       <span class="c">// any field</span>
+}</pre>
+<p class="fname">Fixed</p>
+<pre class="code">public record PublicUser(long id, String name, String email, String phone) {}
+public record ProfileUpdate(@Size(max = 100) String name, @Size(max = 20) String phone) {}
+<span class="c">// spring.jackson.deserialization.fail-on-unknown-properties=true</span>
+
+@GetMapping("/api/users/me")
+public PublicUser me(Principal p) {
+    User u = users.findByEmail(p.getName());
+    return new PublicUser(u.getId(), u.getName(), u.getEmail(), u.getPhone());
+}
+
+@PatchMapping("/api/users/me")
+public void update(@Valid @RequestBody ProfileUpdate body, Principal p) {
+    User u = users.findByEmail(p.getName());
+    if (body.name() != null) u.setName(body.name());
+    if (body.phone() != null) u.setPhone(body.phone());
+    users.save(u);
+}</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<p>ASP.NET Core with request and response records, and the built-in rate limiter.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">[HttpGet("api/users/me")]
+public async Task&lt;User&gt; Me() =&gt; await _db.Users.FindAsync(CurrentUserId());   <span class="c">// the entity</span>
+
+[HttpPatch("api/users/me")]
+public async Task Update(User changes)
+{
+    _db.Users.Update(changes);                                               <span class="c">// any field</span>
+    await _db.SaveChangesAsync();
+}</pre>
+<p class="fname">Fixed</p>
+<pre class="code">public record PublicUser(int Id, string Name, string Email, string Phone);
+public record ProfileUpdate([MaxLength(100)] string? Name, [MaxLength(20)] string? Phone);
+
+[HttpGet("api/users/me")]
+public async Task&lt;PublicUser&gt; Me()
+{
+    var u = await _db.Users.FindAsync(CurrentUserId());
+    return new PublicUser(u!.Id, u.Name, u.Email, u.Phone);
+}
+
+[EnableRateLimiting("profile")]
+[HttpPatch("api/users/me")]
+public async Task Update(ProfileUpdate body)
+{
+    var u = await _db.Users.FindAsync(CurrentUserId());
+    if (body.Name is not null) u!.Name = body.Name;
+    if (body.Phone is not null) u!.Phone = body.Phone;
+    await _db.SaveChangesAsync();
+}</pre>
+</div></details><div class="callout good"><span class="tag">Recommended practice</span><ul>
+<li>Generate or check your OpenAPI document against the code, so undocumented endpoints and fields stand out.</li>
+<li>Write tests that send extra fields (such as <code>role</code>) and check they are refused.</li>
+<li>Apply different rate limits to cheap and expensive endpoints, and to signed-in and anonymous callers.</li>
+</ul></div>
+    <label class="secdone" id="sd-3"><input type="checkbox" class="sec" data-sec="3" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-4">
+  <div class="stage-head"><div class="num" id="num-4">4</div><h2>Lab: read another user's data, then control the fields</h2></div>
+  <p class="goal">Part A: Broken Object Level Authorization in crAPI. Part B: field allow-lists in your language.</p>
+  <div class="stage-body">
+
+<h3>Part A: read another user's vehicle location in crAPI</h3>
+<p>Start crAPI as in Module 0, and open <a href="http://localhost:8888" target="_blank" rel="noopener">http://localhost:8888</a>.</p>
+<ol>
+<li>Sign up with a made-up email address, and sign in.</li>
+<li>Open the test mailbox at <a href="http://localhost:8025" target="_blank" rel="noopener">http://localhost:8025</a>. crAPI has sent your vehicle's VIN and PIN code. Back in crAPI, select <b>Add a Vehicle</b> and enter them.</li>
+<li>Open the developer tools and the <b>Network</b> tab. On the dashboard, select <b>Refresh Location</b> for your vehicle. Find the request to <code>/identity/api/v2/vehicle/&lt;your vehicle ID&gt;/location</code>.</li>
+<li>Open the <b>Community</b> page. In the Network tab, open the response for <code>/community/api/v2/community/posts/recent</code>. Each post's author has a <code>vehicleid</code>. Copy one that is not yours.</li>
+<li>Right-click the location request from step 3 and choose <b>Copy as fetch</b>. Paste it into the <b>Console</b>, replace your vehicle ID in the address with the one you copied, and run it. Add <code>.then(r =&gt; r.json()).then(console.log)</code> at the end to see the result.</li>
+</ol>
+<p>The response shows another user's vehicle location. The API checked that you were signed in, but not that the vehicle was yours. This is API1, Broken Object Level Authorization.</p>
+<div class="callout lens"><span class="tag">Think about it</span><p>Two problems combined here: the community API exposed vehicle IDs that it did not need to share (API3), and the location API did not check ownership (API1).</p></div>
+
+<h3>Part B: control which fields go in and out</h3>
+<p>Each starter has a user record with fields the API must never return (<code>role</code>, <code>passwordHash</code>, <code>credit</code>), and four profile updates. Complete the two functions:</p>
+<ol>
+<li><code>toPublicUser</code> returns only <code>id</code>, <code>name</code>, <code>email</code> and <code>phone</code>.</li>
+<li><code>applyProfileUpdate</code> returns nothing (null or None) if the update contains any field other than <code>name</code> and <code>phone</code>, so the caller prints <code>rejected</code>.</li>
+</ol>
+<p>The expected Node.js output is below. Other languages may add spaces in the JSON, which is fine.</p>
+<pre class="code">1 {"id":7,"name":"Asha","email":"asha@example.com","phone":"0000"}
+2 {"id":7,"name":"Asha R","email":"asha@example.com","phone":"0000"}
+3 rejected
+4 rejected
+5 {"id":7,"name":"Asha R","email":"asha@example.com","phone":"0123456789"}</pre><div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<p class="fname">profile.mjs</p><pre class="code"><span class="c">// TODO: return only id, name, email and phone</span>
+function toPublicUser(user) {
+  return user;
+}
+<span class="c">// TODO: return null if body has any field other than name or phone</span>
+function applyProfileUpdate(user, body) {
+  return { ...user, ...body };
+}
+
+let user = { id: 7, name: "Asha", email: "asha@example.com", phone: "0000",
+             role: "customer", passwordHash: "$argon2id$v=19$m=65536...", credit: 0 };
+const updates = [{ name: "Asha R" }, { role: "admin" }, { name: "X", credit: 1000 }, { phone: "0123456789" }];
+
+console.log("1", JSON.stringify(toPublicUser(user)));
+updates.forEach((body, i) =&gt; {
+  const next = applyProfileUpdate(user, body);
+  if (next) { user = next; console.log(i + 2, JSON.stringify(toPublicUser(user))); }
+  else console.log(i + 2, "rejected");
+});</pre><pre class="code term">node profile.mjs</pre>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<p class="fname">profile.ts</p><pre class="code">type User = { id: number; name: string; email: string; phone: string;
+              role: string; passwordHash: string; credit: number };
+type PublicUser = Pick&lt;User, "id" | "name" | "email" | "phone"&gt;;
+
+<span class="c">// TODO: return only id, name, email and phone</span>
+function toPublicUser(user: User): PublicUser {
+  return user;
+}
+<span class="c">// TODO: return null if body has any field other than name or phone</span>
+function applyProfileUpdate(user: User, body: Record&lt;string, unknown&gt;): User | null {
+  return { ...user, ...body } as User;
+}
+
+let user: User = { id: 7, name: "Asha", email: "asha@example.com", phone: "0000",
+                   role: "customer", passwordHash: "$argon2id$v=19$m=65536...", credit: 0 };
+const updates: Record&lt;string, unknown&gt;[] = [{ name: "Asha R" }, { role: "admin" }, { name: "X", credit: 1000 }, { phone: "0123456789" }];
+
+console.log("1", JSON.stringify(toPublicUser(user)));
+updates.forEach((body, i) =&gt; {
+  const next = applyProfileUpdate(user, body);
+  if (next) { user = next; console.log(i + 2, JSON.stringify(toPublicUser(user))); }
+  else console.log(i + 2, "rejected");
+});</pre><p>Note that TypeScript does not complain about <code>return user</code>, because a <code>User</code> has all the fields of a <code>PublicUser</code>. Types do not remove extra fields at run time.</p><pre class="code term">npx tsx profile.ts</pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p class="fname">profile.py</p><pre class="code">import json
+
+def to_public_user(user):
+    <span class="c"># TODO: return only id, name, email and phone</span>
+    return user
+
+def apply_profile_update(user, body):
+    <span class="c"># TODO: return None if body has any field other than name or phone</span>
+    return {**user, **body}
+
+user = {"id": 7, "name": "Asha", "email": "asha@example.com", "phone": "0000",
+        "role": "customer", "passwordHash": "$argon2id$v=19$m=65536...", "credit": 0}
+updates = [{"name": "Asha R"}, {"role": "admin"}, {"name": "X", "credit": 1000}, {"phone": "0123456789"}]
+
+print(1, json.dumps(to_public_user(user)))
+for i, body in enumerate(updates, 2):
+    updated = apply_profile_update(user, body)
+    if updated is None:
+        print(i, "rejected")
+    else:
+        user = updated
+        print(i, json.dumps(to_public_user(user)))</pre><pre class="code term">python3 profile.py</pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p class="fname">Profile.java</p><pre class="code">import java.util.*;
+
+public class Profile {
+    <span class="c">// TODO: return only id, name, email and phone</span>
+    static Map&lt;String, Object&gt; toPublicUser(Map&lt;String, Object&gt; user) {
+        return user;
+    }
+    <span class="c">// TODO: return null if body has any field other than name or phone</span>
+    static Map&lt;String, Object&gt; applyProfileUpdate(Map&lt;String, Object&gt; user, Map&lt;String, Object&gt; body) {
+        Map&lt;String, Object&gt; next = new LinkedHashMap&lt;&gt;(user);
+        next.putAll(body);
+        return next;
+    }
+
+    <span class="c">// Writes a flat map of strings and numbers as JSON.</span>
+    static String toJson(Map&lt;String, Object&gt; m) {
+        StringJoiner j = new StringJoiner(",", "{", "}");
+        m.forEach((k, v) -&gt; j.add("\"" + k + "\":" + (v instanceof Number ? v : "\"" + v + "\"")));
+        return j.toString();
+    }
+
+    public static void main(String[] args) {
+        Map&lt;String, Object&gt; user = new LinkedHashMap&lt;&gt;();
+        user.put("id", 7); user.put("name", "Asha"); user.put("email", "asha@example.com");
+        user.put("phone", "0000"); user.put("role", "customer");
+        user.put("passwordHash", "$argon2id$v=19$m=65536..."); user.put("credit", 0);
+        List&lt;Map&lt;String, Object&gt;&gt; updates = List.of(
+            Map.of("name", "Asha R"), Map.of("role", "admin"),
+            Map.of("name", "X", "credit", 1000), Map.of("phone", "0123456789"));
+
+        System.out.println("1 " + toJson(toPublicUser(user)));
+        for (int i = 0; i &lt; updates.size(); i++) {
+            Map&lt;String, Object&gt; next = applyProfileUpdate(user, updates.get(i));
+            if (next == null) System.out.println((i + 2) + " rejected");
+            else { user = next; System.out.println((i + 2) + " " + toJson(toPublicUser(user))); }
+        }
+    }
+}</pre><pre class="code term">java Profile.java</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<pre class="code term">dotnet new console -o sc2-m4-cs
+cd sc2-m4-cs</pre><p class="fname">Program.cs</p><pre class="code">using System.Text.Json;
+
+var user = new Dictionary&lt;string, object&gt;
+{
+    ["id"] = 7, ["name"] = "Asha", ["email"] = "asha@example.com", ["phone"] = "0000",
+    ["role"] = "customer", ["passwordHash"] = "$argon2id$v=19$m=65536...", ["credit"] = 0
+};
+var updates = new List&lt;Dictionary&lt;string, object&gt;&gt;
+{
+    new() { ["name"] = "Asha R" }, new() { ["role"] = "admin" },
+    new() { ["name"] = "X", ["credit"] = 1000 }, new() { ["phone"] = "0123456789" }
+};
+
+Console.WriteLine("1 " + JsonSerializer.Serialize(ToPublicUser(user)));
+for (int i = 0; i &lt; updates.Count; i++)
+{
+    var next = ApplyProfileUpdate(user, updates[i]);
+    if (next is null) Console.WriteLine($"{i + 2} rejected");
+    else { user = next; Console.WriteLine($"{i + 2} {JsonSerializer.Serialize(ToPublicUser(user))}"); }
+}
+
+<span class="c">// TODO: return only id, name, email and phone</span>
+static Dictionary&lt;string, object&gt; ToPublicUser(Dictionary&lt;string, object&gt; u) =&gt; u;
+
+<span class="c">// TODO: return null if body has any field other than name or phone</span>
+static Dictionary&lt;string, object&gt;? ApplyProfileUpdate(Dictionary&lt;string, object&gt; u, Dictionary&lt;string, object&gt; body)
+{
+    var next = new Dictionary&lt;string, object&gt;(u);
+    foreach (var (k, v) in body) next[k] = v;
+    return next;
+}</pre><pre class="code term">dotnet run</pre>
+</div></details><div class="callout lens"><span class="tag">Hint</span><p>Build the response from a list of allowed field names, rather than removing fields you know about. A new sensitive field added to the database later is then left out automatically.</p></div><div class="callout verify"><span class="tag">Check your work</span><ul><li>crAPI returned the location of a vehicle that is not yours</li><li>Your output never shows <code>role</code>, <code>passwordHash</code> or <code>credit</code>, and updates 3 and 4 are rejected</li><li>crAPI is stopped (<code>docker compose down</code> in the crapi folder)</li></ul></div>
+    <label class="secdone" id="sd-4"><input type="checkbox" class="sec" data-sec="4" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage check">
+  <div class="stage-head"><div class="num">?</div><h2>Check your understanding</h2></div>
+  <p class="goal">Answer at least 4 of the 5 questions correctly (70%) to unlock the completion box. You can try as many times as you need.</p>
+  <div class="stage-body">
+    <div class="gq" data-i="0">
+      <p class="gstem">1. An API returns another customer's order when the order ID in the address is changed. Which API Security Top 10 risk is this?</p>
+      <label class="gopt"><input type="radio" name="g0" value="0"> <span>API1 Broken Object Level Authorization</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="1"> <span>API4 Unrestricted Resource Consumption</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="2"> <span>API9 Improper Inventory Management</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="3"> <span>API8 Security Misconfiguration</span></label>
+      <div class="gfb" id="gfb-0"></div>
+    </div>
+    <div class="gq" data-i="1">
+      <p class="gstem">2. A sign-up API accepts {"email": "...", "isAdmin": true} and creates an admin account. What is this called?</p>
+      <label class="gopt"><input type="radio" name="g1" value="0"> <span>Server-side request forgery</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="1"> <span>Mass assignment</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="2"> <span>Credential stuffing</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="3"> <span>Excessive data exposure</span></label>
+      <div class="gfb" id="gfb-1"></div>
+    </div>
+    <div class="gq" data-i="2">
+      <p class="gstem">3. The profile page shows only the name, but the API response also contains the password hash. Is that acceptable?</p>
+      <label class="gopt"><input type="radio" name="g2" value="0"> <span>Yes, because the page does not display it</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="1"> <span>Yes, if the hash uses Argon2id</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="2"> <span>No. Anyone can read the full response in the Network tab, so the API must leave the field out</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="3"> <span>No, but only on mobile apps</span></label>
+      <div class="gfb" id="gfb-2"></div>
+    </div>
+    <div class="gq" data-i="3">
+      <p class="gstem">4. An old version of your API (/api/v1) still runs alongside /api/v2, without the newer security checks. Which risk is this?</p>
+      <label class="gopt"><input type="radio" name="g3" value="0"> <span>API9 Improper Inventory Management</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="1"> <span>API2 Broken Authentication</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="2"> <span>API6 Unrestricted Access to Sensitive Business Flows</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="3"> <span>API7 Server Side Request Forgery</span></label>
+      <div class="gfb" id="gfb-3"></div>
+    </div>
+    <div class="gq" data-i="4">
+      <p class="gstem">5. A search API lets callers ask for 1,000,000 results per page. Which control is missing?</p>
+      <label class="gopt"><input type="radio" name="g4" value="0"> <span>Output encoding</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="1"> <span>A maximum page size and rate limits</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="2"> <span>Password hashing</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="3"> <span>Subresource Integrity</span></label>
+      <div class="gfb" id="gfb-4"></div>
+    </div>
+    <div class="gactions"><button class="pbtn" id="gcheck">Check answers</button><span class="gstate" id="gstate"></span></div>
+    <p class="recap"><b>Module recap.</b> For every API request, check the object, the function and each field. Use separate request and response types with explicit fields, limit rates and sizes, keep an inventory of every API version, and treat other companies' APIs as untrusted input.</p>
+  </div>
+</section>
+
+<div class="done">
+  <span class="tag">Completion</span>
+  <label id="lbl"><input type="checkbox" id="cmplt" disabled> I have finished Module 4: Web API security.</label>
+  <p class="sync" id="sync"></p>
+</div>
+
+<div class="pager">
+  <a class="pbtn ghost" href="sc2-m3.html?v=2026110701">&#8592; Module 3</a>
+  <a class="pbtn off" id="nextbtn" href="sc2-m5.html?v=2026110701">Module 5 &#8594;</a>
+</div>
+
+<footer>
+  <div>SF Knowledge Hub &middot; Secure Coding: Intermediate to Advanced &middot; Module 4 of 6</div>
+  <div>build 2026110701</div>
+</footer>
+
+</div>
+<!-- SF auth gate: Google SSO or email/password sign-in. -->
+<script>
+(function () {
+  /* Live config for sfcertification-grafana. */
+  const firebaseConfig = {
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "sfcertification-grafana.firebaseapp.com",
+    projectId: "sfcertification-grafana",
+    storageBucket: "sfcertification-grafana.firebasestorage.app",
+    messagingSenderId: "227322696511",
+    appId: "1:227322696511:web:12e7ced7dd3d45fa06798a"
+  };
+  const ALLOWED_DOMAIN = "sourcefuse.com";
+  /* Admins: always allowed in, without a nomination. */
+  const ADMINS = ["jv.ravichandran@sourcefuse.com", "noushin.khan@sourcefuse.com"];
+
+  /* `courses` document id for this course. Nominations are read from
+     courses/{COURSE_ID}/nominations/{email}, managed in the SF Knowledge Hub. */
+  const COURSE_ID = "__SC2_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  /* True when the page is shown inside another page (the SF Knowledge Hub). */
+  const IN_FRAME = (function(){ try { return window.self !== window.top; } catch (_) { return true; } })();
+
+  let auth, GoogleProvider, signInPopup, signInEmail, onAuth, signOutFn, setPersist, localPersist, readNomination;
+  let readyCb = null;
+
+  async function initFirebase() {
+    const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(firebaseConfig);
+    auth = authMod.getAuth(app);
+    GoogleProvider = authMod.GoogleAuthProvider;
+    signInPopup    = (p) => authMod.signInWithPopup(auth, p);
+    signInEmail    = (e, pw) => authMod.signInWithEmailAndPassword(auth, e, pw);
+    onAuth         = (cb) => authMod.onAuthStateChanged(auth, cb);
+    signOutFn      = () => authMod.signOut(auth);
+    setPersist     = authMod.setPersistence;
+    localPersist   = authMod.browserLocalPersistence;
+    try { await setPersist(auth, localPersist); } catch (_) {}
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const db = fsMod.getFirestore(app);
+    readNomination = (email) => fsMod.getDoc(fsMod.doc(db, "courses", COURSE_ID, "nominations", email));
+  }
+
+  function styleTag(){return `<style>
+    .sf-auth-backdrop{position:fixed;inset:0;background:rgba(16,38,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+    .sf-auth-card{background:#fff;border-radius:22px;padding:42px 36px 38px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(10,30,55,.25);text-align:center;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .sf-auth-badge{display:inline-block;background:var(--level,#1a6eb5);color:#fff;font-weight:700;font-size:12px;padding:4px 11px;border-radius:14px;margin-bottom:14px}
+    .sf-auth-card h2{margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.3;color:#15212d;font-family:inherit}
+    .sf-auth-sub{margin:0 auto 26px;max-width:330px;color:#5e6b79;font-size:14.5px;line-height:1.6}
+    .sf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#366db0;color:#fff;border:0;border-radius:9px;padding:15px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit}
+    .sf-btn:hover{background:#2e5f9b}
+    .sf-btn svg{width:19px;height:19px;flex:none}
+    .sf-or{margin:20px 0;color:#9da7b2;font-size:11.5px;font-weight:500;letter-spacing:.14em}
+    .sf-inp{display:block;width:100%;box-sizing:border-box;border:1.5px solid #dfe5eb;border-radius:9px;padding:13px 14px;font-size:15px;margin:0 0 9px;color:#15212d;background:#fff;font-family:inherit}
+    .sf-inp::placeholder{color:#757575}
+    .sf-inp:focus{outline:none;border-color:#366db0}
+    .sf-err{color:#b5341a;font-size:13px;margin-top:12px;min-height:16px;line-height:1.5}
+    .sf-frame{color:#5e6b79;font-size:12.5px;line-height:1.55;margin:14px 0 0}
+    .sf-frame a{color:#366db0}
+  </style>`;}
+
+  function signinHTML(){return `
+    <div class="sf-auth-backdrop" id="sf-auth"><div class="sf-auth-card">
+      <h2>Secure Coding: Intermediate to Advanced</h2>
+      <p class="sf-auth-sub">Sign in with your SourceFuse Google account to access the course and save your progress.</p>
+      <button class="sf-btn" id="sf-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.35 11.1H12v3.2h5.35c-.5 2.5-2.6 3.9-5.35 3.9a6.2 6.2 0 1 1 4.1-10.85l2.4-2.4A9.6 9.6 0 1 0 12 21.6c5 0 9.6-3.6 9.6-9.6 0-.3 0-.6-.05-.9z"/></svg> Sign in with Google</button>
+      <div class="sf-or">OR</div>
+      <input class="sf-inp" id="sf-email" type="email" placeholder="you@sourcefuse.com" autocomplete="username">
+      <input class="sf-inp" id="sf-pass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="sf-btn" id="sf-email-btn" type="button">Sign in with email</button>
+      <div class="sf-err" id="sf-err"></div>
+      ${IN_FRAME ? '<p class="sf-frame">If the Google sign-in window does not open, <a href="' + location.href + '" target="_blank" rel="noopener">open the course in a new tab</a>, or use Sign in with email.</p>' : ''}
+    </div></div>`;}
+
+  function fail(m){ const e = document.getElementById("sf-err"); if (e) e.textContent = m; }
+  function validDomain(x){
+    if (typeof x !== "string") return false;
+    return x.toLowerCase().endsWith("@" + ALLOWED_DOMAIN);
+  }
+  /* Same check as the SF Knowledge Hub: this course's nominations document
+     for the email exists and is not marked nominated: false. */
+  async function isNominated(x){
+    if (typeof x !== "string") return false;
+    if (ADMINS.indexOf(x.toLowerCase()) !== -1) return true;
+    if (!readNomination) return false;
+    try {
+      const s = await readNomination(x.toLowerCase());
+      return s.exists() && s.data().nominated !== false;
+    } catch (e) {
+      console.log("[auth] nomination read failed:", e && e.message);
+      return false;
+    }
+  }
+  function showNotNominated(){
+    const card = document.getElementById("sf-auth");
+    if (!card) return;
+    card.style.display = "flex";
+    card.innerHTML = '<div class="sf-auth-card">'
+      + '<div class="sf-auth-badge">SF Knowledge Hub</div>'
+      + '<h2>You are not nominated to this course</h2>'
+      + '</div>';
+  }
+  function proceed(user){
+    const el = document.getElementById("sf-auth"); if (el) el.remove();
+    if (readyCb) readyCb(user, signOutFn);
+  }
+
+  function wireSignin(){
+    document.getElementById("sf-google").addEventListener("click", async () => {
+      fail("");
+      if (!signInPopup) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const p = new GoogleProvider();
+      p.setCustomParameters({ hd: ALLOWED_DOMAIN });
+      try {
+        const r = await signInPopup(p);
+        const u = r && r.user;
+        const email = (u && u.email) || "";
+        if (!validDomain(email)) {
+          await signOutFn();
+          return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+        }
+        if (!(await isNominated(email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithPopup failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/popup-blocked")
+          return fail(IN_FRAME
+            ? "The sign-in window was blocked here. Open the course in a new tab using the link below, or use Sign in with email."
+            : "Your browser blocked the sign-in window. Allow pop-ups for this site, then try again.");
+        if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+          return fail("Sign-in was closed before it finished. Try again.");
+        fail("Google sign-in couldn't complete. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+    document.getElementById("sf-email-btn").addEventListener("click", async () => {
+      fail("");
+      if (!signInEmail) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const email = (document.getElementById("sf-email").value || "").trim().toLowerCase();
+      const pass  = document.getElementById("sf-pass").value || "";
+      if (!email || !pass) return fail("Enter your email and password.");
+      if (!validDomain(email)) return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      try {
+        const r = await signInEmail(email, pass);
+        const u = r && r.user;
+        if (!(await isNominated((u && u.email) || email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithEmailAndPassword failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found")
+          return fail("Incorrect email or password.");
+        fail("Sign-in failed. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+  }
+
+  async function mount(onReady){
+    readyCb = onReady;
+    document.head.insertAdjacentHTML("beforeend", styleTag());
+    document.body.insertAdjacentHTML("beforeend", signinHTML());
+    /* Hidden until onAuth reports no session. A signed-in nominated user
+       goes straight through without the overlay appearing at all. */
+    const authCard = document.getElementById("sf-auth");
+    if (authCard) authCard.style.display = "none";
+    try { await initFirebase(); }
+    catch (e) {
+      console.log("[auth] init failed:", e && e.message);
+      if (authCard) authCard.style.display = "flex";
+      fail("Sign-in service didn't load. Reload the page.");
+      return;
+    }
+    if (onAuth) onAuth(async (u) => {
+      if (!u) {
+        if (authCard) authCard.style.display = "flex";
+        return;
+      }
+      if (!validDomain(u.email)) {
+        await signOutFn();
+        if (authCard) authCard.style.display = "flex";
+        return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      }
+      /* Signed in and on-domain, but not on the list. Do not sign them out
+         automatically: the session is shared with the SF Knowledge Hub and
+         dropping it would sign them out of the Hub too. */
+      if (!(await isNominated(u.email))) return showNotNominated();
+      proceed(u);
+    });
+    wireSignin();
+  }
+
+  window.SFAuth = { mount: mount };
+})();
+</script>
+
+<!-- Progress: localStorage written first, Firestore synced after. -->
+<script type="module">
+(function(){
+  /* `courses` document id for this course. Same value in every file of this course. */
+  var CP_COURSE_ID = "__SC2_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  var MODULE_KEYS = ["sc2-m0", "sc2-m1", "sc2-m2", "sc2-m3", "sc2-m4", "sc2-m5", "sc2-m6"];
+  var SECTION_TOTALS = {"sc2-m0": 4, "sc2-m1": 4, "sc2-m2": 4, "sc2-m3": 4, "sc2-m4": 4, "sc2-m5": 4, "sc2-m6": 4};   /* sections per module */
+  var FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  var LS  = "sf-sc2:";                       /* module completion, final test summary */
+  var LSS = "sf-sc2-sec:";                   /* section ticks */
+  var GK  = "sf-sc2-gate:";                  /* check-question gate */
+
+  var fs = null, db = null, cpRef = null, prRef = null, erRef = null,
+      user = null, courseObj = {}, examObj = null, ready = false;
+
+  function stamp(){
+    var p = function(n){ return String(n).padStart(2,"0"); };
+    var d = new Date();
+    return { date: d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()),
+             time: p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds()) };
+  }
+  /* Legacy progress/{uid} field for a module: sc2-m1 -> sc2_m1 */
+  function secField(mk){ return mk.replace(/-/g, "_"); }
+
+  /* ---- localStorage layer ---------------------------------------------- */
+  function jRead(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(_) { return {}; } }
+  function jWrite(k, o){ try { localStorage.setItem(k, JSON.stringify(o)); } catch(_) {} }
+  function lsRead(){ return jRead(LS + user.uid); }
+  function lsWrite(o){ jWrite(LS + user.uid, o); }
+  function secRead(){ return jRead(LSS + user.uid); }
+  function secWrite(o){ jWrite(LSS + user.uid, o); }
+
+  function state(){
+    var o = lsRead();
+    return { modules: o.modules || {}, exam: o.exam || null, sections: secRead() };
+  }
+  function lsSetModule(mk, done){
+    var o = lsRead();
+    o.modules = o.modules || {};
+    if (done) { var t = stamp(); o.modules[mk] = { completedOn: t.date, completedAt: t.time }; }
+    else delete o.modules[mk];
+    lsWrite(o);
+    return state();
+  }
+  function isDone(st, mk){
+    var m = (st && st.modules || {})[mk];
+    return !!(m && m.completedOn);
+  }
+  function sectionsDone(st, mk){
+    var a = ((st && st.sections) || {})[mk] || [];
+    return a.length;
+  }
+
+  /* ---- Firestore layer --------------------------------------------------- */
+  function base(){ return { email: user.email, name: user.displayName || user.email, courses: {} }; }
+
+  function setModuleInProgress(mk){
+    if (!ready || !mk) return Promise.resolve();
+    if (courseObj.courseCompletedOn) return Promise.resolve();
+    if (isDone(courseObj, mk)) return Promise.resolve();
+    var needStart = !courseObj.courseStartedOn;
+    if (courseObj.moduleInProgress === mk && !needStart) return Promise.resolve();
+    var t = stamp();
+    var cu = { moduleInProgress: mk };
+    if (needStart) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+    var update = base(); update.courses[CP_COURSE_ID] = cu;
+    courseObj.moduleInProgress = mk;
+    if (needStart) courseObj.courseStartedOn = t.date;
+    return fs.setDoc(cpRef, update, { merge: true })
+      .catch(function(e){ console.error("[progress] moduleInProgress write failed", e); });
+  }
+
+  /* Read-then-merge completion write. */
+  function completeModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    var t = stamp();
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      if (!obj.courseStartedOn) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+      if (!(existing[mk] && existing[mk].completedOn)) cu.modules[mk] = { completedOn: t.date, completedAt: t.time };
+      var doneAfter = function(k){ return !!((existing[k] && existing[k].completedOn) || cu.modules[k]); };
+      if (MODULE_KEYS.every(doneAfter)) {
+        if (!obj.courseCompletedOn) { cu.courseCompletedOn = t.date; cu.courseCompletedAt = t.time; }
+        cu.moduleInProgress = null;
+      } else {
+        var next = null;
+        for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+        cu.moduleInProgress = next;
+      }
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      courseObj = Object.assign({}, obj, cu, { modules: Object.assign({}, existing, cu.modules) });
+      return fs.setDoc(cpRef, update, { merge: true });
+    });
+  }
+
+  /* Section tick: localStorage first, then progress/{uid}.sc2_mN (arrayUnion). */
+  function tickSection(mk, n){
+    var s = secRead();
+    var a = s[mk] || [];
+    if (a.indexOf(n) === -1) { a.push(n); a.sort(function(x,y){ return x-y; }); }
+    s[mk] = a; secWrite(s);
+    if (!ready) return Promise.reject(new Error("offline"));
+    var upd = {}; upd[secField(mk)] = fs.arrayUnion(n);
+    return fs.setDoc(prRef, upd, { merge: true });
+  }
+
+  /* Final test attempt: one attempt document in courseExamResults + best-attempt summary in examResults. */
+  function recordExam(r){
+    var t = stamp();
+    var o = lsRead();
+    var prev = o.exam || {};
+    var attempts = Math.max(prev.attempts || 0, (examObj && examObj.attempts) || 0, r.attemptNumber);
+    var bestPassed = !!(prev.passed || (examObj && examObj.passed) || r.pass);
+    var bestPct = Math.max(prev.score || 0, (examObj && examObj.score) || 0, r.pct);
+    o.exam = { attempts: attempts, passed: bestPassed, score: bestPct, lastPct: r.pct, lastPass: r.pass,
+               submittedOn: t.date, submittedAt: t.time };
+    lsWrite(o);
+    if (!ready) return Promise.reject(new Error("offline"));
+
+    var attemptId = t.date + "_" + t.time.replace(/:/g, "");
+    var aRef = fs.doc(db, "courseExamResults", user.email, "courses", CP_COURSE_ID, "attempts", attemptId);
+    var body = {
+      email: user.email, name: user.displayName || user.email, courseId: CP_COURSE_ID,
+      attemptNumber: r.attemptNumber, correct: r.correct, total: r.total, pct: r.pct, pass: r.pass,
+      submittedAt: new Date().toISOString(), durationSeconds: r.durationSeconds, timeUp: r.timeUp,
+      detail: r.detail
+    };
+    return fs.setDoc(aRef, body).then(function(){
+      return fs.getDoc(erRef);
+    }).then(function(snap){
+      var cur = (snap.exists() ? (snap.data() || {})[CP_COURSE_ID] : null) || {};
+      var better = !cur.passed && (r.pass || (r.pct >= (cur.score || 0)));
+      var summary = {
+        attempts: Math.max((cur.attempts || 0) + 1, r.attemptNumber),
+        correct: better ? r.correct : cur.correct,
+        total: better ? r.total : cur.total,
+        score: better ? r.pct : cur.score,
+        passed: !!(cur.passed || r.pass),
+        timeTaken: better ? r.durationSeconds : cur.timeTaken,
+        timedOut: better ? r.timeUp : cur.timedOut,
+        submittedAt: better ? new Date().toISOString() : cur.submittedAt
+      };
+      examObj = summary;
+      var upd = { learnerEmail: user.email, learnerName: user.displayName || user.email };
+      upd[CP_COURSE_ID] = summary;
+      return fs.setDoc(erRef, upd, { merge: true });
+    });
+  }
+
+  /* ---- Boot ------------------------------------------------------------ */
+  async function start(u, moduleKey, onState){
+    user = u;
+    var local = state();
+    onState(local, false);                       /* paint from localStorage at once */
+    try {
+      var appMod  = await import(FB + "firebase-app.js");
+      fs          = await import(FB + "firebase-firestore.js");
+      var app = appMod.getApp();                 /* DEFAULT app, never a named one */
+      db    = fs.getFirestore(app);
+      cpRef = fs.doc(db, "courseProgress", user.uid);
+      prRef = fs.doc(db, "progress", user.uid);
+      erRef = fs.doc(db, "examResults", user.uid);
+
+      var cs = await fs.getDoc(cpRef);
+      if (cs.exists()) courseObj = ((cs.data() || {}).courses || {})[CP_COURSE_ID] || {};
+      var remoteSec = {};
+      try {
+        var ps = await fs.getDoc(prRef);
+        var pd = ps.exists() ? (ps.data() || {}) : {};
+        MODULE_KEYS.forEach(function(k){ if (Array.isArray(pd[secField(k)])) remoteSec[k] = pd[secField(k)]; });
+      } catch(e){ console.error("[progress] section read failed", e); }
+      try {
+        var es = await fs.getDoc(erRef);
+        examObj = es.exists() ? ((es.data() || {})[CP_COURSE_ID] || null) : null;
+      } catch(e){ console.error("[progress] exam read failed", e); }
+      ready = true;
+
+      /* Merge: anything complete in either store stays complete. */
+      var o = lsRead();
+      o.modules = Object.assign({}, local.modules || {}, courseObj.modules || {});
+      if (examObj) {
+        var le = o.exam || {};
+        o.exam = { attempts: Math.max(le.attempts || 0, examObj.attempts || 0),
+                   passed: !!(le.passed || examObj.passed),
+                   score: Math.max(le.score || 0, examObj.score || 0),
+                   lastPct: le.lastPct, lastPass: le.lastPass,
+                   submittedOn: le.submittedOn, submittedAt: le.submittedAt };
+      }
+      lsWrite(o);
+      var sLocal = secRead(), pushSec = [];
+      MODULE_KEYS.forEach(function(k){
+        var a = (sLocal[k] || []).slice();
+        (remoteSec[k] || []).forEach(function(n){ if (a.indexOf(n) === -1) a.push(n); });
+        (sLocal[k] || []).forEach(function(n){ if ((remoteSec[k] || []).indexOf(n) === -1) pushSec.push([k, n]); });
+        if (a.length) { a.sort(function(x,y){ return x-y; }); sLocal[k] = a; }
+      });
+      secWrite(sLocal);
+      onState(state(), true);
+
+      /* Push anything localStorage had that Firestore did not. */
+      var pending = Object.keys(local.modules || {}).filter(function(k){ return !isDone(courseObj, k); });
+      for (var i = 0; i < pending.length; i++) {
+        try { await completeModule(pending[i]); } catch(e){ console.error("[progress] backfill failed", e); }
+      }
+      for (var j = 0; j < pushSec.length; j++) {
+        try { var upd = {}; upd[secField(pushSec[j][0])] = fs.arrayUnion(pushSec[j][1]); await fs.setDoc(prRef, upd, { merge: true }); }
+        catch(e){ console.error("[progress] section backfill failed", e); }
+      }
+      await setModuleInProgress(moduleKey);
+    } catch(e) {
+      console.error("[progress] Firestore unavailable, localStorage only:", e);
+      onState(state(), false);
+    }
+  }
+
+  /* ---- Redo -----------------------------------------------------------
+     Clears one module: completion, section ticks and check-question answers,
+     on this device and in Firestore. Final test attempts are records
+     and are left untouched.                                               */
+  function clearLocalModule(mk){
+    var o = lsRead(); if (o.modules) delete o.modules[mk]; lsWrite(o);
+    var s = secRead(); delete s[mk]; secWrite(s);
+    var g = jRead(GK + user.uid); delete g[mk]; jWrite(GK + user.uid, g);
+    return state();
+  }
+  function redoModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      cu.modules[mk] = fs.deleteField();
+      if (obj.courseCompletedOn) { cu.courseCompletedOn = fs.deleteField(); cu.courseCompletedAt = fs.deleteField(); }
+      var doneAfter = function(k){ return k !== mk && !!(existing[k] && existing[k].completedOn); };
+      var next = null;
+      for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+      cu.moduleInProgress = next;
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      var fresh = Object.assign({}, existing); delete fresh[mk];
+      courseObj = Object.assign({}, obj, { modules: fresh, moduleInProgress: next });
+      delete courseObj.courseCompletedOn; delete courseObj.courseCompletedAt;
+      var pr = {}; pr[secField(mk)] = fs.deleteField();
+      return Promise.all([fs.setDoc(cpRef, update, { merge: true }), fs.setDoc(prRef, pr, { merge: true })]);
+    });
+  }
+
+  window.SFProgress = {
+    start: start,
+    redo: redoModule,
+    clearLocalModule: clearLocalModule,
+    moduleKeys: MODULE_KEYS,
+    sectionTotals: SECTION_TOTALS,
+    isDone: isDone,
+    sectionsDone: sectionsDone,
+    read: function(){ return user ? state() : {}; },
+    setLocal: function(mk, done){ return lsSetModule(mk, done); },
+    sync: function(mk, done){
+      if (!ready) return Promise.reject(new Error("offline"));
+      return done ? completeModule(mk) : Promise.resolve();
+    },
+    tickSection: tickSection,
+    recordExam: recordExam,
+    examRemote: function(){ return examObj; },
+    isReady: function(){ return ready; },
+    gateKey: GK,
+    courseId: function(){ return CP_COURSE_ID; }
+  };
+})();
+</script>
+
+<script type="module">
+(function(){
+  var MK = "sc2-m4";
+  var PASS_PCT = 70;   /* module check: share of questions that must be right */
+  var NSEC = 4;
+  var GATE = [{"answer": 0, "why": "Object-level authorisation means checking, for every object, that the caller may use it."}, {"answer": 1, "why": "Mass assignment copies request fields straight into a record. Accept only an allow-list of fields."}, {"answer": 2, "why": "Hiding a field in the page protects nothing. The response itself must contain only the fields the caller may see."}, {"answer": 0, "why": "Keep an inventory of every API version and environment, and retire versions that are no longer needed."}, {"answer": 1, "why": "This is API4 Unrestricted Resource Consumption. Limit page size, request rate, body size and processing time."}];
+  var P = window.SFProgress;
+  var KEYS = P.moduleKeys;
+
+  function gateRead(uid){ try { return JSON.parse(localStorage.getItem(P.gateKey + uid) || "{}"); } catch(_) { return {}; } }
+  function gateWrite(uid, o){ try { localStorage.setItem(P.gateKey + uid, JSON.stringify(o)); } catch(_) {} }
+
+  document.querySelectorAll('.langbar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('data-lang') === 'open';
+      var scope = b.closest('.stage-body') || document;
+      scope.querySelectorAll('details.lang').forEach(function(d){ d.open = open; });
+    });
+  });
+
+  window.SFAuth.mount(async function(user, signOut){
+    document.getElementById('who').innerHTML =
+      (user.email || '') + ' <button class="signout" id="signout">Sign out</button>';
+    var so = document.getElementById('signout');
+    if (so && signOut) so.onclick = function(){ signOut().then(function(){ location.reload(); }); };
+
+    var box = document.getElementById('cmplt'), lbl = document.getElementById('lbl'),
+        sync = document.getElementById('sync'), nextbtn = document.getElementById('nextbtn'),
+        gcheck = document.getElementById('gcheck'), gstate = document.getElementById('gstate');
+    var gatePassed = false;
+
+    function showGateSatisfied(){
+      gatePassed = true;
+      GATE.forEach(function(gq, i){
+        var rs = document.querySelectorAll('input[name="g' + i + '"]');
+        if (rs[gq.answer]) rs[gq.answer].checked = true;
+        var fb = document.getElementById('gfb-' + i);
+        if (fb) fb.innerHTML = '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>';
+      });
+      document.querySelectorAll('.gq input[type=radio]').forEach(function(r){ r.disabled = true; });
+      if (gcheck) gcheck.style.display = 'none';
+      gstate.textContent = 'Check questions passed';
+    }
+
+    gcheck.addEventListener('click', function(){
+      var nRight = 0, unanswered = 0;
+      var need = Math.ceil(GATE.length * PASS_PCT / 100);
+      GATE.forEach(function(gq, i){
+        var sel = document.querySelector('input[name="g' + i + '"]:checked');
+        var fb  = document.getElementById('gfb-' + i);
+        if (!sel) { unanswered++; fb.innerHTML = ''; return; }
+        var ok = parseInt(sel.value, 10) === gq.answer;
+        if (ok) nRight++;
+        fb.innerHTML = ok
+          ? '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>'
+          : '<div class="callout caution"><span class="tag">Not quite</span><p>Look at the module again and try once more.</p></div>';
+      });
+      if (unanswered) { gstate.textContent = 'Answer every question first.'; return; }
+      if (nRight < need) { gstate.textContent = nRight + ' of ' + GATE.length + ' correct. You need ' + need + '. Try again.'; return; }
+      var gs = gateRead(user.uid); gs[MK] = true; gateWrite(user.uid, gs);
+      showGateSatisfied();
+      paint(P.read());
+    });
+
+    document.querySelectorAll('input.sec').forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if (!cb.checked) return;
+        var n = parseInt(cb.getAttribute('data-sec'), 10);
+        var pr = P.tickSection(MK, n);
+        paint(P.read());
+        pr.catch(function(e){
+          console.error('[progress] section sync failed', e);
+          sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+        });
+      });
+    });
+
+    function paint(state){
+      var ticks = (state.sections || {})[MK] || [];
+      for (var i = 1; i <= NSEC; i++) {
+        var cb = document.querySelector('input.sec[data-sec="' + i + '"]');
+        var on = ticks.indexOf(i) !== -1;
+        cb.checked = on; cb.disabled = on;
+        document.getElementById('sd-' + i).classList.toggle('ticked', on);
+        document.getElementById('num-' + i).classList.toggle('ok', on);
+      }
+      var nDone = KEYS.filter(function(k){ return P.isDone(state, k); }).length;
+      var secCount = Math.min(ticks.length, NSEC);
+      document.getElementById('fill').style.width = (secCount / NSEC) * 100 + '%';
+      document.getElementById('count').textContent = 'This module: ' + secCount + ' of ' + NSEC
+        + ' sections \u00b7 Course: ' + nDone + ' of ' + KEYS.length + ' modules complete';
+
+      var done = P.isDone(state, MK);
+      if (!gatePassed && (done || gateRead(user.uid)[MK])) showGateSatisfied();
+      if (done) {
+        var m = (state.modules || {})[MK] || {};
+        box.checked = true; box.disabled = true;
+        lbl.classList.add('checked'); lbl.classList.remove('locked');
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + (m.completedAt ? ' at ' + m.completedAt : '');
+        nextbtn.classList.remove('off');
+        return;
+      }
+      nextbtn.classList.add('off');
+      box.checked = false;
+      var allSec = secCount >= NSEC;
+      box.disabled = !(allSec && gatePassed);
+      lbl.classList.toggle('locked', box.disabled);
+      if (!allSec && !gatePassed) sync.textContent = 'To unlock: finish every section and pass the check questions.';
+      else if (!allSec) sync.textContent = 'To unlock: tick the finish box at the end of every section.';
+      else if (!gatePassed) sync.textContent = 'To unlock: pass the check questions above.';
+      else sync.textContent = '';
+    }
+
+    await P.start(user, MK, function(state){ paint(state); });
+
+    box.addEventListener('change', async function(){
+      if (!box.checked) return;
+      var state = P.setLocal(MK, true);          /* localStorage first */
+      paint(state);
+      sync.textContent = 'Saved on this device. Syncing\u2026';
+      try {
+        await P.sync(MK, true);
+        var m = (state.modules || {})[MK] || {};
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + ' \u00b7 saved to your SF record';
+      } catch(e) {
+        console.error('[progress] sync failed', e);
+        sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
